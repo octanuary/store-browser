@@ -39,10 +39,12 @@ if (props.openWithHover) {
 			showDropdown.value = true;
 			setTimeout(() => {
 				window.addEventListener("click", clicked);
+				document.addEventListener("mouseleave", clicked);
 			}, 15);
 		}
 		function clicked(e:MouseEvent) {
 			window.removeEventListener("click", clicked);
+			document.removeEventListener("mouseleave", clicked);
 			showDropdown.value = false;
 		}
 	});
@@ -53,11 +55,13 @@ if (props.openWithHover) {
 			showDropdown.value = false;
 			setTimeout(() => {
 				window.addEventListener("click", clicked);
+				document.addEventListener("mouseleave", clicked);
 				showDropdown.value = true;
 			}, 15);
 		}
 		function clicked(e:MouseEvent) {
 			window.removeEventListener("click", clicked);
+			document.removeEventListener("mouseleave", clicked);
 			if (e.target == toggle.value) {
 				return;
 			}

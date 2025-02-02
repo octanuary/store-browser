@@ -6,11 +6,13 @@
 	font-size: 14px;
 	font-weight: bold;
 	display: flex;
-	padding: 12px 24px;
-	width: 309px;
-	height: 50px;
+	padding: 12px 24px 7px;
+	width: 310px;
+	height: 45px;
 
 	& .theme_icon {
+		background: #e2e7ed;
+		border-radius: 100%;
 		margin-top: -2px;
 		margin-right: 9px;
 	}
@@ -30,7 +32,7 @@
 
 .extra {
 	background: #eef2f8;
-	box-shadow: inset 0 6px 4px -4px #0001;
+	box-shadow: inset 0 6px 5px -4px #0001;
 	border-radius: 0 0 4px 4px;
 	margin-top: 5px;
 	padding: 5px 0 7px 0;
@@ -65,12 +67,8 @@ import DropdownSeparator from "./controls/DropdownSeparator.vue";
 import { ref } from "vue";
 import ThemeManager from "../managers/ThemeManager";
 
-
-await ThemeManager.loadThemeList();
-await ThemeManager.loadTheme(ThemeManager.themeColumns[0][0]);
-
-const themeId = ThemeManager.currentTheme;
-
+await ThemeManager.initialize();
+const themeId = ThemeManager.currentTheme.id;
 const currentCol = ref(findColumn(themeId));
 
 function findColumn(id:string) {
@@ -79,6 +77,7 @@ function findColumn(id:string) {
 			return column;
 		}
 	}
+	return ThemeManager.themeColumns[0];
 }
 
 function extraColumns() {
@@ -110,6 +109,10 @@ function themeIcoPath(id:string|void) {
 			<span class="theme_name">{{ theme?.name }}</span>
 		</DropdownItem>
 		<div class="extra">
+			<DropdownItem>
+				<img class="theme_icon" src="../static/img/common.png"/>
+				<span class="theme_name">Common</span>
+			</DropdownItem>
 			<DropdownItem>
 				<img class="theme_icon" src="../static/img/Comm.png"/>
 				<span class="theme_name">Community Library</span>

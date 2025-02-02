@@ -18,10 +18,30 @@ body {
 	display: flex;
 }
 
+::-webkit-scrollbar {
+	width: 15px;
+}
+::-webkit-scrollbar-track {
+	background: linear-gradient(90deg, #f2f2f2, #fafafa 75%, #dfdfdf 100%);
+	border-left: 1px solid #e4e4e4;
+}
+::-webkit-scrollbar-thumb {
+	background: #c1c1c1;
+	background-clip: padding-box;
+	border-top: 1px solid #0000;
+	border-right: 3px solid #0000;
+	border-bottom: 1px solid #0000;
+	border-left: 4px solid #0000;
+	border-radius: 6px;
+	cursor: pointer;
+	width: 8px;
+}
+
 </style>
 
 <script setup lang="ts">
 import ThumbTray from "./components/ThumbTray.vue";
+
 </script>
 
 <template>

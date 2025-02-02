@@ -1,8 +1,10 @@
+import ThemeModel from "../models/theme/ThemeModel";
 import themelist from "../static/themelist.json";
+import { useParams } from "../composables/params";
 
 class ThemeManagerClass {
 	private static _instance:ThemeManagerClass;
-	private _currentTheme:string;
+	private _currentTheme:ThemeModel;
 	private _themeList:typeof themelist.themes = [];
 	private _themeColumns:typeof themelist.sort;
 
@@ -11,6 +13,25 @@ class ThemeManagerClass {
 			this._instance = new ThemeManagerClass();
 		}
 		return this._instance;
+	}
+
+	/**
+	 * call when using thememanager to avoid errors
+	 */
+	public async initialize() {
+		if (this.themeList.length == 0) {
+			await this.loadThemeList();
+
+			let themeId:string;
+			const params = useParams();
+			if (params.get("tray")) {
+				themeId = params.get("tray") as string;
+			} else {
+				themeId = this.themeColumns[0][0];
+			}
+
+			await this.loadTheme(themeId);
+		}
 	}
 
 	/**
@@ -29,11 +50,9 @@ class ThemeManagerClass {
 	/**
 	 * loads the themelist
 	 */
-	public async loadThemeList() {
-		if (this.themeList.length == 0) {
-			this._themeList = themelist.themes;
-			this._themeColumns = themelist.sort;
-		}
+	private async loadThemeList() {
+		this._themeList = themelist.themes;
+		this._themeColumns = themelist.sort;
 	}
 
 	/**
@@ -43,8 +62,10 @@ class ThemeManagerClass {
 	public async loadTheme(id:string) {
 		const req = await fetch(`https://flashthemes.net/static/store/${id}/theme.xml`);
 		const text = await req.text();
-		console.log(text);
-		this._currentTheme = id;
+		const doc = new DOMParser().parseFromString(text, "text/xml");
+		const theme = new ThemeModel();
+		await theme.parse(doc.children[0]);
+		this._currentTheme = theme;
 	}
 
 	/**
